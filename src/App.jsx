@@ -1,20 +1,27 @@
 // App — base application layout.
-// Part of the WAMD TD-TP 2 lab (devcrate). Feature views (catalog, cart,
-// product detail modal) will be rendered inside <main> in later phases.
+// Currently renders the catalog; the cart view and the view state will be
+// added when the Redux cart exists (next phase).
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
+import CatalogPage from "./features/catalog/CatalogPage.jsx";
 
 export default function App() {
+  // Temporary demo handler — every "Add to cart" click lands here.
+  // The Redux phase replaces this body with:
+  //   const dispatch = useDispatch();
+  //   const handleAddToCart = (product) => dispatch(addToCart(product));
+  // ProductCard and CatalogPage keep the exact same props and need no change.
+  function handleAddToCart(product) {
+    console.info(
+      `[demo] add-to-cart clicked: "${product.name}" (id: ${product.id})`,
+    );
+  }
+
   return (
     <div className="page">
       <Header />
       <main className="page__main">
-        <section className="placeholder">
-          <h1 className="placeholder__title">This is a base layout</h1>
-          <p className="placeholder__text">
-            The product catalog will be rendered here in the next phase.
-          </p>
-        </section>
+        <CatalogPage onAddToCart={handleAddToCart} />
       </main>
       <Footer />
     </div>

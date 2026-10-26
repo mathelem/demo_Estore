@@ -1,30 +1,36 @@
 /* devcrate — global styles.
-   Structure: design tokens → reset → page shell → components.
-   Component styles are grouped and BEM-named (block__element). */
+   Visual identity: "Paper & Ink" — warm paper background, hand-inked
+   borders with hard offset shadows (risograph/sticker look), bold serif
+   display type, two spot colors used sparingly.
+   Structure: design tokens → reset → type scale → page shell → components
+   (BEM block__element naming). */
 
 /* ---------- Design tokens (the store's visual identity) ---------- */
 
 :root {
-  /* palette: warm paper background, soft ink, one indigo accent */
-  --color-bg: #f7f5f0;
-  --color-surface: #ffffff;
-  --color-ink: #1c1b18;
-  --color-ink-soft: #6b675f;
-  --color-accent: #4f46e5;
-  --color-accent-soft: #eef0fe;
-  --color-success: #15803d;
-  --color-border: #e6e2da;
+  /* palette: cream paper, ink black, red-orange + cobalt spot colors */
+  --color-bg: #faf5ec;
+  --color-surface: #fffdf8;
+  --color-ink: #16130f;
+  --color-ink-soft: #6f675c;
+  --color-accent: #e4572e; /* riso spot red-orange */
+  --color-accent-2: #2549d8; /* riso spot cobalt */
+  --color-accent-soft: #f9e6dc; /* orange tint for chips and tiles */
+  --color-border: #ddd2c0;
 
-  /* shape & depth */
-  --radius: 14px;
-  --radius-sm: 10px;
-  --shadow: 0 1px 2px rgb(28 27 24 / 0.06), 0 4px 14px rgb(28 27 24 / 0.07);
+  /* shape: sticker cards — crisp ink borders, hard offset shadows */
+  --radius: 10px;
+  --radius-sm: 6px;
+  --border-ink: 2px solid var(--color-ink);
+  --shadow: 3px 3px 0 var(--color-ink);
+  --shadow-lift: 5px 5px 0 var(--color-ink);
 
   /* layout */
-  --container: 1100px;
+  --container: 1000px;
   --gap: 1.5rem;
 
-  /* typography */
+  /* typography: Fraunces display (fallback: Georgia) + system sans body */
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
   --font-sans: "Segoe UI", system-ui, -apple-system, "Helvetica Neue",
     Arial, sans-serif;
   --lh: 1.55;
@@ -54,11 +60,11 @@ img {
 
 ::selection {
   background: var(--color-accent);
-  color: #fff;
+  color: var(--color-surface);
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--color-accent-2);
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -71,11 +77,14 @@ button {
   cursor: pointer;
 }
 
+/* ---------- Type scale ---------- */
+
 h1,
 h2,
 h3 {
-  line-height: 1.2;
-  letter-spacing: -0.03em;
+  font-family: var(--font-display);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
 }
 
 /* ---------- Page shell ---------- */
@@ -93,20 +102,20 @@ h3 {
   padding: var(--gap) 0 3rem;
 }
 
-/* ---------- Header ---------- */
+/* ---------- Header (ink-ruled masthead) ---------- */
 
 .header {
   position: sticky;
   top: 0;
   z-index: 10;
-  background: var(--color-surface);
-  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg);
+  border-bottom: 2px solid var(--color-ink);
 }
 
 .header__inner {
   width: min(var(--container), 100% - 2rem);
   margin: 0 auto;
-  padding: 0.7rem 0;
+  padding: 0.65rem 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -120,91 +129,262 @@ h3 {
   gap: 0.65rem;
 }
 
+/* logo sticker: tilted tile with an ink border and a hard shadow */
 .header__logo {
   display: grid;
   place-items: center;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.6rem;
+  height: 2.6rem;
   font-size: 1.3rem;
-  background: var(--color-accent-soft);
+  background: var(--color-surface);
+  border: var(--border-ink);
   border-radius: var(--radius-sm);
+  box-shadow: 2px 2px 0 var(--color-ink);
+  transform: rotate(-4deg);
 }
 
 .header__name-group {
   display: flex;
   flex-direction: column;
-  line-height: 1.15;
+  line-height: 1.1;
 }
 
 .header__name {
-  font-size: 1.15rem;
-  font-weight: 800;
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 900;
   letter-spacing: -0.02em;
 }
 
 .header__tagline {
   font-size: 0.78rem;
   color: var(--color-ink-soft);
+  letter-spacing: 0.02em;
 }
 
 .header__nav {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.55rem;
 }
 
+/* nav chips look like inked labels; press them and they "sit down" */
 .header__link {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  padding: 0.5rem 0.95rem;
+  padding: 0.45rem 0.9rem;
+  background: var(--color-surface);
+  border: var(--border-ink);
   border-radius: 999px;
+  box-shadow: 2px 2px 0 var(--color-ink);
   font-weight: 600;
+  transition: transform 0.08s ease, box-shadow 0.08s ease,
+    background-color 0.08s ease;
 }
 
 .header__link:hover {
   background: var(--color-accent-soft);
-  color: var(--color-accent);
+  transform: translate(-1px, -1px);
+  box-shadow: var(--shadow);
+}
+
+.header__link:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 var(--color-ink);
 }
 
 .header__badge {
   display: inline-grid;
   place-items: center;
   min-width: 1.5rem;
-  padding: 0.1rem 0.4rem;
+  padding: 0.05rem 0.4rem;
   border-radius: 999px;
-  background: var(--color-accent);
+  background: var(--color-accent-2);
   color: #fff;
   font-size: 0.78rem;
   font-weight: 700;
+  border: 2px solid var(--color-ink);
 }
 
-/* ---------- Placeholder (base-layout proof, removed next phase) --- */
+/* ---------- Buttons (reusable "inked stamp" style) ---------- */
 
-.placeholder {
-  margin-top: 2.5rem;
-  padding: 2.5rem 1.5rem;
+.btn {
+  padding: 0.5rem 0.95rem;
   background: var(--color-surface);
-  border: 1px dashed var(--color-border);
-  border-radius: var(--radius);
+  border: var(--border-ink);
+  border-radius: var(--radius-sm);
+  box-shadow: 2px 2px 0 var(--color-ink);
+  font-weight: 700;
+  transition: transform 0.08s ease, box-shadow 0.08s ease,
+    background-color 0.08s ease;
 }
 
-.placeholder__title {
-  margin: 0 0 0.5rem;
-  font-size: clamp(1.4rem, 3vw, 1.9rem);
+.btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: var(--shadow);
 }
 
-.placeholder__text {
+.btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 var(--color-ink);
+}
+
+.btn--add {
+  background: var(--color-ink);
+  color: var(--color-bg);
+}
+
+.btn--add:hover {
+  background: var(--color-accent);
+}
+
+/* ---------- Catalog page ---------- */
+
+.catalog__header {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.4rem;
+}
+
+.catalog__title {
   margin: 0;
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: 900;
+}
+
+.catalog__count {
+  margin: 0;
+  padding: 0.15rem 0.7rem;
+  background: var(--color-surface);
+  border: 2px solid var(--color-ink);
+  border-radius: 999px;
+  box-shadow: 2px 2px 0 var(--color-ink);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+/* Responsive paper grid: fills rows, collapses naturally on phones. */
+.catalog__grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
+  gap: 1.1rem;
+}
+
+/* ---------- Product card (catalog tag) ---------- */
+
+.card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--color-surface);
+  border: var(--border-ink);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-lift);
+}
+
+/* artwork tile: category tints via data-category (single source in CSS) */
+.card__art {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  display: grid;
+  place-items: center;
+  border-bottom: var(--border-ink);
+  background: var(--color-accent-soft);
+}
+
+img.card__art {
+  display: block;
+  object-fit: cover;
+}
+
+.card__art-emoji {
+  font-size: 3rem;
+  transform: rotate(-4deg);
+  filter: drop-shadow(2px 2px 0 rgb(22 19 15 / 0.15));
+}
+
+.card__art[data-category="peripherals"] {
+  background: #e3e9fc; /* cobalt tint */
+}
+
+.card__art[data-category="desk-gear"] {
+  background: #f9e6dc; /* red-orange tint */
+}
+
+.card__art[data-category="drinkware"] {
+  background: #e2f0e0; /* moss tint */
+}
+
+.card__art[data-category="apparel"] {
+  background: #f1e7cf; /* sand tint */
+}
+
+.card__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.9rem 1rem 0.5rem;
+}
+
+.card__category {
+  margin: 0;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
   color: var(--color-ink-soft);
+}
+
+.card__name {
+  margin: 0;
+  font-size: 1.12rem;
+  font-weight: 800;
+}
+
+.card__description {
+  margin: 0;
+  font-size: 0.86rem;
+  color: var(--color-ink-soft);
+}
+
+.card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.7rem 1rem 1rem;
+}
+
+/* price with a hand-ruled spot-color underline */
+.card__price {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 900;
+  border-bottom: 3px solid var(--color-accent);
+  padding-bottom: 2px;
 }
 
 /* ---------- Footer ---------- */
 
 .footer {
   padding: 1.4rem;
-  border-top: 1px solid var(--color-border);
-  background: var(--color-surface);
+  border-top: 2px solid var(--color-ink);
+  background: var(--color-bg);
 }
 
 .footer__text {
